@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Recipe {
 	id: number;
@@ -40,5 +40,3 @@ const recipesSlice = createSlice({
 
 export const { setRecipes, toggleFavorite } = recipesSlice.actions;
 export default recipesSlice.reducer;
-
-
