@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { loadRecipesFromStorage, toggleFavorite } from "@/store/slices/recipesSlice";
+import Link from "next/link";
 
 export default function ClientRecipes() {
 	const dispatch = useAppDispatch();
@@ -33,7 +34,9 @@ export default function ClientRecipes() {
 			<ul>
 				{recipes.map(rec => (
 					<li key={rec.id}>
-						<h3>{rec.name}</h3>
+						<Link href={`/recipes/${rec.id}`}>
+							<h3>{rec.name}</h3>
+						</Link>
 						<button onClick={() => handleFavoriteToggle(rec.id)}>
 							{rec.isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
 						</button>
