@@ -58,9 +58,18 @@ const recipesSlice = createSlice({
 		loadRecipesFromStorage: (state, action: PayloadAction<RecipesState>) => {
 			state.allRecipes = action.payload.allRecipes;
 			state.favoriteRecipes = action.payload.favoriteRecipes;
+		},
+		updateRecipe: (state, action: PayloadAction<Omit<Recipe, 'isFavorite'>>) => {
+			const { id, name, ingredients } = action.payload;
+			const recipe = state.allRecipes.find(rec => rec.id === id)
+			if (recipe) {
+				recipe.name = name;
+				recipe.ingredients = ingredients;
+				saveToLocalStorage(state);
+			}
 		}
 	},
 });
 
-export const { setRecipes, addRecipe, toggleFavorite, loadRecipesFromStorage } = recipesSlice.actions;
+export const { setRecipes, addRecipe, toggleFavorite, loadRecipesFromStorage, updateRecipe } = recipesSlice.actions;
 export default recipesSlice.reducer;
