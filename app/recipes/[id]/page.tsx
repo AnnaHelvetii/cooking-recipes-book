@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { ReactHTMLElement, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/store";
@@ -19,6 +19,7 @@ export default function RecipePage() {
 	const [editedName, setEditedName] = useState('');
 	const [ingredients, setIngredients] = useState<string[]>([]);
 	const [newIngredient, setNewIngredient] = useState('');
+	const [isVegan, setIsVegan] = useState(false);
 
 	useEffect(() => {
 		const allRecipes = localStorage.getItem('allRecipes');
@@ -38,31 +39,33 @@ export default function RecipePage() {
 		if (recipe) {
 			setEditedName(recipe.name);
 			setIngredients(recipe.ingredients);
+			setIsVegan(recipe.isVegan);
 		}
 	}, [recipe]);
 
-	const updateRecipeInStore = (updatedName: string, updatedIngredients: string[]) => {
+	const updateRecipeInStore = (updatedName: string, updatedIngredients: string[], updatedIsVegan: boolean) => {
 		if (recipe) {
 			dispatch(
 				updateRecipe({
 					id: recipe.id,
 					name: updatedName,
-					ingredients: updatedIngredients
+					ingredients: updatedIngredients,
+					isVegan: updatedIsVegan,
 				})
 			);
 		}
 	};
 
-	const handleNamechange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newName = e.target.value;
 		setEditedName(newName);
-		updateRecipeInStore(newName, ingredients);
+		updateRecipeInStore(newName, ingredients, isVegan);
 	};
 	
 	const handleDeleteIngredient = (index: number) => {
 		const updatedIngredients = ingredients.filter((_, i) => i !== index);
 		setIngredients(updatedIngredients);
-		updateRecipeInStore(editedName, updatedIngredients);
+		updateRecipeInStore(editedName, updatedIngredients, isVegan);
 	};
 
 	const handleAddIngredient = () => {
@@ -70,8 +73,14 @@ export default function RecipePage() {
 			const updatedIngredients = ([...ingredients, newIngredient.trim()]);
 			setIngredients(updatedIngredients);
 			setNewIngredient('');
-			updateRecipeInStore(editedName, updatedIngredients);
+			updateRecipeInStore(editedName, updatedIngredients, isVegan);
 		}
+	};
+
+	const handleVeganChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const newIsVegan = e.target.checked;
+		setIsVegan(newIsVegan);
+		updateRecipeInStore(editedName, ingredients, newIsVegan);
 	};
 
 	if (isLoading) {
@@ -91,7 +100,7 @@ export default function RecipePage() {
 					type="text"
 					id="recipeName"
 					value={editedName}
-					onChange={handleNamechange}
+					onChange={handleNameChange}
 				/>
 			</div>
 			<div>
@@ -117,6 +126,16 @@ export default function RecipePage() {
 				<button
 					onClick={handleAddIngredient}
 				>Добавить ингредиент</button>
+			</div>
+			<div>
+				<label>
+					<input
+						type="checkbox"
+						checked={isVegan}
+						onChange={handleVeganChange}
+					/>
+					Подходит для веганов?
+				</label>
 			</div>
 			<div>
 				<p>

@@ -5,6 +5,7 @@ interface Recipe {
 	name: string;
 	ingredients: string[];
 	isFavorite: boolean;
+	isVegan: boolean;
 }
 
 interface RecipesState {
@@ -36,7 +37,7 @@ const recipesSlice = createSlice({
 			saveToLocalStorage(state);
 		},
 		addRecipe: (state, action: PayloadAction<Omit<Recipe, 'id'>>) => {
-			const newRecipe = { ...action.payload, id: Date.now() };
+			const newRecipe = { ...action.payload, id: Date.now(), isFavorite: false };
 			state.allRecipes.push(newRecipe);
 			saveToLocalStorage(state);
 		},
@@ -60,11 +61,12 @@ const recipesSlice = createSlice({
 			state.favoriteRecipes = action.payload.favoriteRecipes;
 		},
 		updateRecipe: (state, action: PayloadAction<Omit<Recipe, 'isFavorite'>>) => {
-			const { id, name, ingredients } = action.payload;
+			const { id, name, ingredients, isVegan } = action.payload;
 			const recipe = state.allRecipes.find(rec => rec.id === id)
 			if (recipe) {
 				recipe.name = name;
 				recipe.ingredients = ingredients;
+				recipe.isVegan = isVegan;
 				saveToLocalStorage(state);
 			}
 		}
