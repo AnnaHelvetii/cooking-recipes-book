@@ -1,0 +1,21 @@
+@import 'variables';
+@import 'mixins';
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	color: #333;
+	background-color: #f9f9f9;
+	line-height: 1.6;
+}
+
+.container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 1rem;
+}

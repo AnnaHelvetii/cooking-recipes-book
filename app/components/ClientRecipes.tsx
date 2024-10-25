@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { loadRecipesFromStorage, toggleFavorite } from "@/store/slices/recipesSlice";
 import Link from "next/link";
+import styles from './../styles/ClientRecipes.module.scss';
 
 export default function ClientRecipes() {
 	const dispatch = useAppDispatch();
@@ -42,54 +43,54 @@ export default function ClientRecipes() {
 	};
 
 	return (
-		<div className="container">
-			<div>
-				<h2>All Recipes</h2>
+		<div className={styles['recipes-container']}>
+			<h2>Все рецепты</h2>
+			<div className={styles['search-bar']}>
 				<input
 					type="text"
 					placeholder="Найти по названию или ингредиенту"
 					value={searchTerm}
 					onChange={(e) => setSearchTerm(e.target.value)}
 				/>
-				<div>
-					<label>
-						<input
-							type="checkbox"
-							checked={isVeganOnly}
-							onChange={(e) => setIsVeganOnly(e.target.checked)}
-						/>
-					</label>
-					Только веганские
-				</div>
-				<ul>
-					{filtredRecipes.length > 0 ? (
-						filtredRecipes.map((rec) => (
-							<li key={rec.id}>
-								<Link href={`/recipes/${rec.id}`}>
-									<h3>{rec.name}</h3>
-								</Link>
-								<button onClick={() => handleFavoriteToggle(rec.id)}>
-									{rec.isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
-								</button>
-								<p>{rec.ingredients.join(', ')}</p>
-								<p>{rec.isVegan ? 'Vegan' : 'Non-vegan'}</p>
-							</li>
-						))
-					) : (
-						<li>Рецепты не найдены</li>
-					)}
-				</ul>
 			</div>
+			<div className={styles['filter']}>
+				<label>
+					<input
+						type="checkbox"
+						checked={isVeganOnly}
+						onChange={(e) => setIsVeganOnly(e.target.checked)}
+					/>
+					Только веганские
+				</label>
+			</div>
+			<ul className={styles['recipe-list']}>
+				{filtredRecipes.length > 0 ? (
+					filtredRecipes.map((rec) => (
+						<li key={rec.id}>
+							<Link href={`/recipes/${rec.id}`}>
+								<h3>{rec.name}</h3>
+							</Link>
+							<button onClick={() => handleFavoriteToggle(rec.id)}>
+								{rec.isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+							</button>
+							<p className={styles['ingredients']}>{rec.ingredients.join(', ')}</p>
+							<p className={styles['isVegan']}>{rec.isVegan ? 'Vegan' : 'Non-vegan'}</p>
+						</li>
+					))
+				) : (
+					<p>Рецепты не найдены</p>
+				)}
+			</ul>
 			
 			<div>
-				<h2>Favorite Recipes</h2>
+				<h2>Любимые рецепты</h2>
 				<ul>
 					{favoriteRecipes.map(rec => (
 						<li key={rec.id}>
 							<h3>{rec.name}</h3>
 						</li>
 					))}
-				</ul>	
+				</ul>
 			</div>
 		</div>
 	)

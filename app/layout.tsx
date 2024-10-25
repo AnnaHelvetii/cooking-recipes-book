@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { store } from '@/store/store'
 import { Providers } from './Providers'
-import './globals.scss'
+import './styles/globals.scss'
 
 export const metadata: Metadata = {
 	title: 'My recipes catalog',

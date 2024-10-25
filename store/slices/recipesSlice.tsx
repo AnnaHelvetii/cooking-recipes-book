@@ -1,11 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+interface RecipeStep {
+	stepNumber: number;
+	description: string;
+	image?: string;
+}
+
 interface Recipe {
 	id: number;
 	name: string;
 	ingredients: string[];
 	isFavorite: boolean;
 	isVegan: boolean;
+	steps: RecipeStep[];
 }
 
 interface RecipesState {
@@ -61,17 +68,36 @@ const recipesSlice = createSlice({
 			state.favoriteRecipes = action.payload.favoriteRecipes;
 		},
 		updateRecipe: (state, action: PayloadAction<Omit<Recipe, 'isFavorite'>>) => {
-			const { id, name, ingredients, isVegan } = action.payload;
+			const { id, name, ingredients, isVegan, steps } = action.payload;
 			const recipe = state.allRecipes.find(rec => rec.id === id)
 			if (recipe) {
 				recipe.name = name;
 				recipe.ingredients = ingredients;
 				recipe.isVegan = isVegan;
+				recipe.steps = steps;
 				saveToLocalStorage(state);
 			}
-		}
+		},
+		addRecipeStep: (state, action: PayloadAction<{ recipeId: number; step: RecipeStep }>) => {
+			const { recipeId, step } = action.payload;
+			const recipe = state.allRecipes.find(rec => rec.id === recipeId);
+			if (recipe) {
+				recipe.steps.push(step);
+				saveToLocalStorage(state);
+			}
+		},
+		removeRecipeStep: (state, action: PayloadAction<{ recipeId: number; stepNumber: number }>) => {
+			const { recipeId, stepNumber } = action.payload;
+			const recipe = state.allRecipes.find(rec => rec.id === recipeId);
+			if (recipe) {
+				recipe.steps = recipe.steps.filter(step => step.stepNumber !== stepNumber);
+				saveToLocalStorage(state);
+			}
+		},
 	},
 });
 
-export const { setRecipes, addRecipe, toggleFavorite, loadRecipesFromStorage, updateRecipe } = recipesSlice.actions;
+export const { 
+	setRecipes, addRecipe, toggleFavorite, loadRecipesFromStorage, updateRecipe, addRecipeStep, removeRecipeStep 
+} = recipesSlice.actions;
 export default recipesSlice.reducer;

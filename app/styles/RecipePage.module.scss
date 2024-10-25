@@ -1,0 +1,64 @@
+@import 'variables';
+@import 'mixins';
+
+.recipe-container {
+	margin: 2rem 0;
+
+	h1 {
+		font-size: $font-size-title;
+		color: $primary-color;
+		margin-bottom: 1rem;
+	}
+
+	label {
+		font-weight: bold;
+		display: block;
+		margin-top: 1rem;
+	}
+
+	input[type='text'] {
+		width: 100%;
+		padding: 0.5rem;
+		margin-top: 0.5rem;
+		margin-bottom: 1rem;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+	}
+
+	.ingredients-list {
+		list-style: none;
+		padding: 0;
+
+		li {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin: 0.5rem 0;
+
+			button {
+				@include button-style($secondary-color);
+			}
+		}
+	}
+
+	.step-item {
+		border: 1px solid #ddd;
+		padding: 1rem;
+		margin-bottom: 1rem;
+		border-radius: 5px;
+
+		h3 {
+			color: $primary-color;
+		}
+
+		img {
+			max-width: 100px;
+			margin-top: 0.5rem;
+		}
+	}
+
+	.edit-button,
+	.delete-button {
+		@include button-style($primary-color);
+	}
+}
