@@ -167,100 +167,130 @@ export default function RecipePage() {
 
 	return (
 		<div className={styles['recipe-container']}>
-			<h1>Редактировать рецепт:</h1>
-			<div>
-				<label htmlFor="recipeName">Название рецепта:</label>
+			<div className={styles["back-to-main"]}>
+				<Link href="/">
+					<button className={styles["back-to-main__button"]}>
+						Вернуться ко всем рецептам
+					</button>
+				</Link>
+			</div>
+			<h1 className={styles['recipe-page__header']}>Редактировать рецепт:</h1>
+			<div className={styles["recipe-page__title"]}>
+				<label htmlFor={styles["recipeName"]} className="recipe-page__title-label">Название рецепта:</label>
 				<input 
 					type="text"
 					id="recipeName"
 					value={editedName}
 					onChange={handleNameChange}
-					className={styles['input']}
+					className={styles['recipe-page__title-input']}
 				/>
 			</div>
 			<div className={styles['ingredients-list']}>
-				<p>Ингредиенты:</p>
-				<ul>
+				<p className={styles["ingredients-list__title"]}>Ингредиенты:</p>
+				<ul className={styles["ingredients-list__list"]}>
 					{recipe.ingredients.map((ing, index) => (
-						<li key={index}>
+						<li key={index} className={styles["ingredients-list__list-item"]}>
 							{ing}
-							<button onClick={() => handleDeleteIngredient(index)}>
+							<button className={styles["ingredients-list__list-button"]} onClick={() => handleDeleteIngredient(index)}>
 								Удалить
 							</button>
 						</li>
 					))}
 				</ul>
 			</div>
-			<div>
+			<div className={styles["add-ingredient-form"]}>
 				<input 
 					type="text"
 					value={newIngredient}
 					onChange={(e) => setNewIngredient(e.target.value)}
 					placeholder="Новый ингредиент"
+					className={styles["add-ingredient-form__input"]}
 				/>
 				<button
 					onClick={handleAddIngredient}
-				>Добавить ингредиент</button>
+					className={styles["add-ingredient-form__button"]}
+				>
+					Добавить ингредиент
+				</button>
 			</div>
-			<div>
-				<label>
+			<div className={styles["is-vegan"]}>
+				<label className={styles["is-vegan__label"]}>
 					<input
 						type="checkbox"
 						checked={isVegan}
 						onChange={handleVeganChange}
+						className={styles["is-vegan__button"]}
 					/>
 					Подходит для веганов?
 				</label>
 			</div>
-			<div>
-				<h2>Приготовление:</h2>
+			<div className={styles["cooking-steps"]}>
+				<h2 className={styles["cooking-steps__header"]}>Приготовление:</h2>
 				{steps.length > 0 ? (steps.map((step) => (
-					<div key={step.stepNumber} className={styles['step-item']}>
-						<h3>Шаг {step.stepNumber}</h3>
-						<p>{step.description}</p>
-						{step.image && <img src={step.image} alt={`Step ${step.stepNumber}`} width='100' />}
+					<div key={step.stepNumber} className={styles['cooking-steps__item']}>
+						<h3 className={styles['cooking-steps__item-number']}>Шаг {step.stepNumber}</h3>
+						<p className={styles['cooking-steps__item-description']}>{step.description}</p>
+						{step.image && 
+							<img
+								src={step.image} 
+								alt={`Step ${step.stepNumber}`} 
+								width='100'
+								className={styles['cooking-steps__item-img']}
+							/>}
 						<button
-							className={styles['delete-button']}
+							className={styles['cooking-steps__button_delete']}
 							onClick={() => handleDeleteStep(step.stepNumber)}>Удалить шаг</button>
 						<button
-							className={styles['edit-button']}
+							className={styles['cooking-steps__button_edit']}
 							onClick={() => handleEditStep(step)}>Редактировать шаг</button>
 					</div>
 					))
 				) : (
-					<p>Шаги еще не добавлены</p>
+					<p className={styles["cooking-steps__none"]}>Шаги еще не добавлены</p>
 				)}
 			</div>
-			<div>
-				<h3>{editingStep ? 'Редактировать' : 'Добавить еще один шаг'}</h3>
+			<div className={styles["add-and-edit-step-form"]}>
+				<h3 className={styles["add-and-edit-step-form__title"]}>
+					{editingStep ? 'Редактировать' : 'Добавить еще один шаг'}
+				</h3>
 				<textarea
 					value={newStepDescription}
 					onChange={(e) => setNewStepDescription(e.target.value)}
 					placeholder="Что нужно сделать?"
+					className={styles["add-and-edit-step-form__text"]}
 				/>
 				<input 
 					type="file"
 					onChange={handleImageUpload}
+					className={styles["add-and-edit-step-form__load-file"]}
 				/>
 				{newStepImage && (
-					<div>
-						<img src={newStepImage} alt="Фото шага приготовления" width='100' />
-						<button onClick={handleRemoveImage}>Удалить фото</button>
+					<div className={styles["delete-image-form"]}>
+						<img 
+							src={newStepImage} 
+							alt="Фото шага приготовления" 
+							width='100' 
+							className={styles["delete-image-form__img"]}
+						/>
+						<button 
+							onClick={handleRemoveImage}
+							className={styles["delete-image-form__button"]}
+						>
+							Удалить фото	
+						</button>
 					</div>
 				)}
-				<button onClick={editingStep ? handleSaveEditedStep : handleAddStep}>
+				<button 
+					onClick={editingStep ? handleSaveEditedStep : handleAddStep}
+					className={styles["add-and-edit-step-form__button"]}
+				>
 					{editingStep ? 'Редактировать шаг' : 'Добавить шаг?'}
 				</button>
 			</div>
-			<div>
-				<p>
+			<div className={styles["favorite-recipe"]}>
+				<p className={styles["favorite-recipe__title"]}>
 				{recipe.isFavorite ? 'Это Ваш любимый рецепт!' : ''}
 				</p>
-			</div>
-			<div>
-				<Link href="/">
-					<button>Вернуться ко всем рецептам</button>
-				</Link>
 			</div>
 		</div>
 	)
